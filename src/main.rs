@@ -3,7 +3,7 @@ use core::arch::x86_64::_rdtsc;
 use std::time::Duration;
 
 fn main() {
-    let print_values: bool = false;
+    let print_values: bool = true;
     const ITERATION_COUNT: u64 = 100;
     const SLEEP_DURATION: u64 = 10;
 
@@ -16,7 +16,7 @@ fn main() {
 
         total += stop - start;
 
-        if PRINT_VALUES {
+        if print_values {
             println!("{} - {} = {}", start, stop, stop - start);
         }
 
@@ -34,7 +34,7 @@ fn main() {
 
         total += stop - start;
 
-        if PRINT_VALUES {
+        if print_values {
             println!("{} - {} = {}", start, stop, stop - start);
         }
 
