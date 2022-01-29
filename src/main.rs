@@ -1,12 +1,10 @@
 use core::arch::x86_64::__cpuid;
 use core::arch::x86_64::_rdtsc;
-use std::time::Duration;
 use winapi::um::processthreadsapi::{GetCurrentThread, SetThreadPriority};
 use winapi::um::winbase::THREAD_PRIORITY_TIME_CRITICAL;
 
 const PRINT_VALUES: bool = false;
-const ITERATION_COUNT: u64 = 20_000;
-const SLEEP_DURATION: u64 = 10;
+const ITERATION_COUNT: u64 = 200_000;
 
 #[inline(always)]
 fn rdtsc_rdtsc() {
@@ -55,7 +53,7 @@ fn rdtsc_cpuid_rdtsc_calibration() {
     let timestamp_calibration = unsafe { _rdtsc() } - start;
 
     let mut total = 0;
-    for _ in 0..0x6694 {
+    for _ in 0..26260 {
         let start = unsafe { _rdtsc() };
         let _ = unsafe { __cpuid(0) };
         let stop = unsafe { _rdtsc() };
@@ -66,12 +64,13 @@ fn rdtsc_cpuid_rdtsc_calibration() {
             println!("{} - {} = {}", start, stop, stop - start);
         }
     }
-    let result = 10000000 * total / timestamp_calibration / 0x65;
+    let result = 100_000 * total / timestamp_calibration;
     println!("Average: {}", result);
 }
 
 fn main() {
-    let old_priority = unsafe { SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL as _) };
+    let old_priority =
+        unsafe { SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL as _) };
 
     //
     //
